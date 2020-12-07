@@ -1,5 +1,5 @@
 function InformUser(props) {
-  return <aside className="informUser">
+  return <aside className="informUser animate__animated animate__zoomIn">
     {props.children}
   </aside>;
 }

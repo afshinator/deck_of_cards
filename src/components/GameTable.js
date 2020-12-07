@@ -1,5 +1,6 @@
 import GameStats from "./GameStats";
 import Dealer from "./Dealer";
+import Player from "./Player";
 
 function GameTable({ state, dispatch }) {
   const dealerDeckClickHandler = function () {
@@ -20,6 +21,8 @@ function GameTable({ state, dispatch }) {
         gameStage={state.gameStage}
         dealerDeckClickHandler={dealerDeckClickHandler}
       />
+      <Player who="user" state={state} clickHandler={userDeckClickHandler} />
+      <Player who="opponent" state={state} />
     </div>
   );
 }

@@ -2,8 +2,8 @@ const CARDS_IN_A_DECK = 52; // not couting jokers
 const RANKS_PER_SUITE = 13; // 1-10 plus Jack, Queen, King
 const SUITES = "♠︎ ♥︎ ♣︎ ♦︎".split(" ");
 
-
 const ANIM_IN_LEFT = "animate__fadeInLeftBig"; // animate.css classes
+const ANIM_TADA = "animate__tada";
 const ANIM_WARALERT = "animate__pulse";
 
 const USER_MESSAGES = {
@@ -40,7 +40,6 @@ const CARD_CHARS = {
   "♦︎": ["🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎"],
 };
 
-
 export {
   SUITES,
   RANKS_PER_SUITE,
@@ -48,5 +47,5 @@ export {
   USER_MESSAGES,
   CARD_CHARS,
   ANIM_IN_LEFT,
+  ANIM_TADA,
 };
-

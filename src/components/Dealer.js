@@ -6,7 +6,7 @@ function Dealer({ gameStage, dealerDeckClickHandler }) {
     <section className="dealer">
       {gameStage < 1 ? (
         <FaceDownStack
-          dealerDeckClickHandler={dealerDeckClickHandler}
+          clickHandler={dealerDeckClickHandler}
           animClass={ANIM_IN_LEFT}
         />
       ) : null}

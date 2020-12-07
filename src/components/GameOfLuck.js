@@ -1,8 +1,10 @@
 import { Component } from "react";
-import {ErrorBoundary} from 'react-error-boundary'
+import { ErrorBoundary } from "react-error-boundary";
 import useGameState from "./useGameState";
+import InformUser from "./InformUser";
+import { USER_MESSAGES } from "../constants";
+import GameTable from './GameTable';
 
-// const ErrBoundary = ReactErrorBoundary.ErrorBoundary
 
 function ErrorFallback({ error }) {
   return (
@@ -13,16 +15,14 @@ function ErrorFallback({ error }) {
   );
 }
 
-
-
 function GameOfLuck() {
   const [state, dispatch] = useGameState();
-  console.log("State in Game:", state);
 
   return (
-    <div className="gameArea">
+    <div className="gameOfLuck">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-
+        <InformUser>{USER_MESSAGES[state.gameStage]}</InformUser>
+        <GameTable state={state} dispatch={dispatch} />
       </ErrorBoundary>
     </div>
   );

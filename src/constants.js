@@ -9,12 +9,9 @@ const ANIM_WARALERT = "animate__pulse";
 const USER_MESSAGES = {
   0: (
     <span>
-      Welcome to{" "}
-      <a href="https://en.wikipedia.org/wiki/War_(card_game)" target="_new">
-        <strong>War</strong>
-      </a>
-      .<strong> Click on the dealers deck</strong> to start the game and test
-      your luck.
+      Each player deals off the top of the deck, the higher card wins.<br />
+      Whoever runs out of cards first loses.  Your wins are added to your stack of cards.<br />
+      <strong>Click on dealers deck to start the game.</strong>
     </span>
   ),
   2: (

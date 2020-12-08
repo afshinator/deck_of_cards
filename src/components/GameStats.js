@@ -37,7 +37,8 @@ function GameStats({ state }) {
       </p>
       <div className="statsMiddle">
         {gameStage === 2 ? <h3>➾ Your turn </h3> : null}
-        {gameStage === 4 ? <h3>✩ {lastWin} won that round ✩</h3> : null}
+        {gameStage === 4 && lastWin!=="" ? <h3>✩ {lastWin} won that round ✩</h3> : null}
+        {gameStage === 4 && lastWin ==="" ? <h3>✩ Same card! Random winner! ✩</h3> : null}
         {gameStage === 5 ? (
           <h3>✩✩ {winCheckOpp ? "Opponent won game!" : "User won game!"} ✩✩</h3>
         ) : null}

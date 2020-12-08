@@ -27,9 +27,13 @@ Launches the test runner.  **I've added some tests for DeckOfCards**
 
 * Create React App; just because it is known, provides a nice baseline
 
-* I wanted some high impact animation; I got the most for the buck by using css from anime.css; I didn't install the component, just to keep the project essentialy dependency-free.
+* Card games... I haven't played in decades.  So I went ahead and made one up.
+
+* I wanted some animation; I got the most for the buck by using css from anime.css; I didn't install the component, just to keep the project essentialy dependency-free.
 
 * I haven't played with 'classes' in Javascript since before they added that keyword to the language! It was interesting learning about the new syntax and how it works, the iterator, etc... 
+
+* In trying to find out how to display the cards, I found out they're already in the browser as unicode characters; so that decision became simple.
 
 * Even though the game exercises the DeckOfCards, the tests are a better test.
 

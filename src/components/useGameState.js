@@ -32,15 +32,15 @@ function useGameState(initialState = INITIAL_STATE) {
     }
 
     switch (action.type) {
-      case "DEAL_TO_OPPONENT":    // Stage 0
+      case "DEAL_TO_OPPONENT": // Stage 0
         newState.opponentsUnplayedCards = action.data;
         return newState;
 
-      case "DEAL_TO_USER":        // Stage 0
+      case "DEAL_TO_USER": // Stage 0
         newState.usersUnplayedCards = action.data;
         return newState;
 
-      case "START_GAME":          // Stage 0
+      case "START_GAME": // Stage 0
         newState.gameStage++;
         return newState;
 
@@ -52,16 +52,27 @@ function useGameState(initialState = INITIAL_STATE) {
         }
         return newState;
 
-      case "ROUND_WIN":           // Stage 3
-        temp =
-          newState.usersCardsInPlay[0].rank <
+      case "ROUND_WIN": // Stage 3
+        if (
+          // Both players have same card; select random winner
+          newState.usersCardsInPlay[0].rank ===
           newState.opponentsCardsInPlay[0].rank
-            ? newState.opponentsUnplayedCards
-            : newState.usersUnplayedCards;
-        
-        // Randomize order in which won cards are added to bottom 
+        ) {
+          if (Math.random() >= 0.5) {
+            temp = newState.opponentsUnplayedCards;
+          } else {
+            temp = newState.usersUnplayedCards;
+          }
+        } else
+          temp =
+            newState.usersCardsInPlay[0].rank <
+            newState.opponentsCardsInPlay[0].rank
+              ? newState.opponentsUnplayedCards
+              : newState.usersUnplayedCards;
+
+        // Randomize order in which won cards are added to bottom
         // of winners stack to help eliminate stalemates.
-        if ( Math.random() >= 0.5 ) {
+        if (Math.random() >= 0.5) {
           temp.unshift(newState.usersCardsInPlay.pop());
           temp.unshift(newState.opponentsCardsInPlay.pop());
         } else {
@@ -69,8 +80,9 @@ function useGameState(initialState = INITIAL_STATE) {
           temp.unshift(newState.usersCardsInPlay.pop());
         }
 
-        newState.roundsInPlay++
-        if ( // check for somebody having won...
+        newState.roundsInPlay++;
+        if (
+          // check for somebody having won...
           newState.opponentsUnplayedCards.length === 0 ||
           newState.usersUnplayedCards.length === 0
         ) {
@@ -81,11 +93,11 @@ function useGameState(initialState = INITIAL_STATE) {
 
         return newState;
 
-      case "ADVANCE_ROUND":       // Stage 4
+      case "ADVANCE_ROUND": // Stage 4
         newState.gameStage = 1;
         return newState;
 
-      case "SOMEBODY_LOST":       // Stage 5
+      case "SOMEBODY_LOST": // Stage 5
         return INITIAL_STATE;
 
       default:

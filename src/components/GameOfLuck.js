@@ -28,7 +28,7 @@ function GameOfLuck() {
 
   useEffect(() => {
     deck.shuffle();
-  }, [deck, dispatch]);
+  }, [deck]);
 
   const dealerDeckClickHandler = function () {
     if (state.gameStage === 0) {
@@ -44,11 +44,27 @@ function GameOfLuck() {
     }
   };
 
-  const userDeckClickHandler = function () {
+  const userDeckClickHandler = function (e) {
+    if (e.shiftKey) logOutState()
     if (state.gameStage === 2) {
       dispatch({ type: "PLAY_TOP_CARD", data: "user" });
     }
   };
+
+  // For introspection
+  const logOutState = function() {
+    const user = []
+    const opp = []
+    let i;
+    for (i=0; i< state.usersUnplayedCards.length; i++ ) {
+      user.push(state.usersUnplayedCards[i])
+    }
+    for (i=0; i< state.opponentsUnplayedCards.length; i++ ) {
+      opp.push(state.opponentsUnplayedCards[i])
+    }
+    console.table(user)
+    console.table(opp)
+  }
 
   return (
     <div className="gameOfLuck">

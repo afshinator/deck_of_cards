@@ -1,16 +1,14 @@
 import { useState } from "react";
 
-function GameStats({state}) {
+function GameStats({ state }) {
   const {
     gameStage,
     usersCardsInPlay,
     opponentsCardsInPlay,
     usersUnplayedCards,
     opponentsUnplayedCards,
-    usersWins,
-    opponentsWins,
   } = state;
-  const [lastWin, setLastWin] = useState('')
+  const [lastWin, setLastWin] = useState("");
   let winCheckUser;
   let winCheckOpp;
 
@@ -28,27 +26,24 @@ function GameStats({state}) {
     else if (winCheckOpp && lastWin === "") setLastWin("Opponent");
   }
 
-  if ( gameStage === 5) {
-    winCheckOpp = usersUnplayedCards.length + usersWins.length < 1
-    winCheckUser = opponentsUnplayedCards.length + opponentsWins.length < 1
+  if (gameStage === 5) {
+    winCheckOpp = usersUnplayedCards.length < 1;
+    winCheckUser = opponentsUnplayedCards.length < 1;
   }
   return (
     <div className="gameStats">
       <p>
-        ➾ YOUR stack:<strong>{usersUnplayedCards.length}</strong>, wins:{" "}
-        {usersWins.length}
+        ➾ YOUR stack:<strong>{usersUnplayedCards.length}</strong>
       </p>
       <div className="statsMiddle">
         {gameStage === 2 ? <h3>➾ Your turn </h3> : null}
-        {gameStage === 4 ? <h3>✩ {lastWin} Won that round ✩</h3> : null}
-        {gameStage === 5 
-        ? 
-        <h3>✩✩ { winCheckOpp ? 'Opponent Won!' : 'User Won!'} ✩✩</h3> 
-        : null }
+        {gameStage === 4 ? <h3>✩ {lastWin} won that round ✩</h3> : null}
+        {gameStage === 5 ? (
+          <h3>✩✩ {winCheckOpp ? "Opponent won game!" : "User won game!"} ✩✩</h3>
+        ) : null}
       </div>
       <p>
-        ➾ OPPONENTS stack:<strong>{opponentsUnplayedCards.length}</strong>,
-        wins: {opponentsWins.length}
+        ➾ OPPONENTS stack:<strong>{opponentsUnplayedCards.length}</strong>
       </p>
     </div>
   );

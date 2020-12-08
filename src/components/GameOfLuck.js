@@ -1,38 +1,13 @@
 import { ErrorBoundary } from "react-error-boundary";
-// import useGameState from "./useGameState";
 import InformUser from "./InformUser";
 import { USER_MESSAGES } from "../constants";
 import GameTable from "./GameTable";
-
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import { DeckOfCards } from "../DeckOfCards";
-import { simpleDeepCopy } from "../utils";
+import useGameState from "./useGameState";
+import ErrorFallback from "./ErrorFallback";
 
-import useGameState from "./useGameState"
-
-function ErrorFallback({ error }) {
-  return (
-    <div>
-      <p>
-        In case of application crash, show this spiffy component as a fallback
-        instead of broken screen.
-      </p>
-      {/* <pre>{error.message}</pre> */}
-    </div>
-  );
-}
-
-const INITIAL_STATE = {
-  gameStage: 0, // will help synchronize state with stages in game
-  usersUnplayedCards: [],
-  usersCardsInPlay: [],
-  usersWins: [],
-  opponentsUnplayedCards: [],
-  opponentsCardsInPlay: [],
-  opponentsWins: [],
-  warAlert: false, // true to trigger some visual effects
-};
-
+const CARDS_PER_PLAYER = 4;
 
 function GameOfLuck() {
   const [deck] = useState(() => {
@@ -46,8 +21,14 @@ function GameOfLuck() {
 
   const dealerDeckClickHandler = function () {
     if (state.gameStage === 0) {
-      dispatch({ type: "DEAL_TO_USER", data: deck.dealOffTop(3) });
-      dispatch({ type: "DEAL_TO_OPPONENT", data: deck.dealOffTop(3) });
+      dispatch({
+        type: "DEAL_TO_USER",
+        data: deck.dealOffTop(CARDS_PER_PLAYER),
+      });
+      dispatch({
+        type: "DEAL_TO_OPPONENT",
+        data: deck.dealOffTop(CARDS_PER_PLAYER),
+      });
       dispatch({ type: "START_GAME" });
     }
   };
@@ -58,8 +39,6 @@ function GameOfLuck() {
     }
   };
 
-  console.log("GameOfLuck rendering ", simpleDeepCopy(state));
-  
   return (
     <div className="gameOfLuck">
       <ErrorBoundary FallbackComponent={ErrorFallback}>

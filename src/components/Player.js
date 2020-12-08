@@ -1,5 +1,5 @@
-import FaceDownStack from './FaceDownStack';
-import VisiblePlayingCard from './VisiblePlayingCard';
+import FaceDownStack from "./FaceDownStack";
+import VisiblePlayingCard from "./VisiblePlayingCard";
 import { ANIM_IN_LEFT, ANIM_TADA } from "../constants";
 
 function CardPlaceHolder() {
@@ -10,24 +10,24 @@ function Player(props) {
   const { who, state, clickHandler } = props;
   const {
     gameStage,
+    roundsInPlay,
     usersUnplayedCards,
     usersCardsInPlay,
-    usersWins,
     opponentsUnplayedCards,
     opponentsCardsInPlay,
-    opponentsWins,
   } = state;
 
   const isUser = who === "user"; // else is "opponent"
   const cardsInPlay = isUser ? usersCardsInPlay : opponentsCardsInPlay;
   const unplayedCards = isUser ? usersUnplayedCards : opponentsUnplayedCards;
-  const wins = isUser ? usersWins : opponentsWins;
 
   const winCheck =
     gameStage === 3 &&
     (isUser
       ? usersCardsInPlay[0].rank > opponentsCardsInPlay[0].rank
       : usersCardsInPlay[0].rank < opponentsCardsInPlay[0].rank);
+
+  const slideInOnce = roundsInPlay < 0 ? ANIM_IN_LEFT : "";
 
   return (
     <section className={`${who}`}>
@@ -50,12 +50,7 @@ function Player(props) {
         <CardPlaceHolder />
       )}
       {unplayedCards.length ? (
-        <FaceDownStack animClass={ANIM_IN_LEFT} clickHandler={clickHandler} />
-      ) : (
-        <CardPlaceHolder />
-      )}
-      {wins.length ? (
-        <FaceDownStack clickHandler={clickHandler} />
+        <FaceDownStack animClass={slideInOnce} clickHandler={clickHandler} />
       ) : (
         <CardPlaceHolder />
       )}

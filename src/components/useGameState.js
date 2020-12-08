@@ -4,13 +4,11 @@ import { simpleDeepCopy } from "../utils";
 
 const INITIAL_STATE = {
   gameStage: 0, // will help synchronize state with stages in game
+  roundsInPlay: 0, // to keep track of how long the game goes on
   usersUnplayedCards: [],
   usersCardsInPlay: [],
-  usersWins: [],
   opponentsUnplayedCards: [],
   opponentsCardsInPlay: [],
-  opponentsWins: [],
-  warAlert: false, // true to trigger some visual effects
 };
 
 function useGameState(initialState = INITIAL_STATE) {
@@ -20,15 +18,8 @@ function useGameState(initialState = INITIAL_STATE) {
 
     function playTop(who, faceUp = false) {
       const unplayed = newState[`${who}sUnplayedCards`];
-      const wins = newState[`${who}sWins`];
       const inPlay = newState[`${who}sCardsInPlay`];
 
-      // replenish from wins if unplayed stack is almost empty
-      if (unplayed.length < 2 && wins.length > 0) {
-        while (wins.length > 0) {
-          unplayed.unshift(wins.pop());
-        }
-      }
       if (unplayed.length < 1) {
         // this player ran out of cards
         console.log("THIS PLAYER LOST: ", who);
@@ -42,15 +33,15 @@ function useGameState(initialState = INITIAL_STATE) {
     }
 
     switch (action.type) {
-      case "DEAL_TO_OPPONENT": // Stage 0
+      case "DEAL_TO_OPPONENT":    // Stage 0
         newState.opponentsUnplayedCards = action.data;
         return newState;
 
-      case "DEAL_TO_USER": // Stage 0
+      case "DEAL_TO_USER":        // Stage 0
         newState.usersUnplayedCards = action.data;
         return newState;
 
-      case "START_GAME": // Stage 0
+      case "START_GAME":          // Stage 0
         newState.gameStage++;
         return newState;
 
@@ -62,27 +53,41 @@ function useGameState(initialState = INITIAL_STATE) {
         }
         return newState;
 
-      case "ROUND_WIN":
-        console.log("-->ROUND_WIN");
-        // Favors the opponent, but then opponent draws first and can run out first
+      case "ROUND_WIN":           // Stage 3
         temp =
           newState.usersCardsInPlay[0].rank <
           newState.opponentsCardsInPlay[0].rank
-            ? newState.opponentsWins
-            : newState.usersWins;
-        while (newState.usersCardsInPlay.length) {
-          temp.push(newState.usersCardsInPlay.pop());
+            ? newState.opponentsUnplayedCards
+            : newState.usersUnplayedCards;
+        
+        // Randomize order in which won cards are added to bottom 
+        // of winners stack to help eliminate stalemates.
+        if ( Math.random() >= 0.5 ) {
+          temp.unshift(newState.usersCardsInPlay.pop());
+          temp.unshift(newState.opponentsCardsInPlay.pop());
+        } else {
+          temp.unshift(newState.opponentsCardsInPlay.pop());
+          temp.unshift(newState.usersCardsInPlay.pop());
         }
-        while (newState.opponentsCardsInPlay.length) {
-          temp.push(newState.opponentsCardsInPlay.pop());
+
+        newState.roundsInPlay++
+        if ( // check for somebody having won...
+          newState.opponentsUnplayedCards.length === 0 ||
+          newState.usersUnplayedCards.length === 0
+        ) {
+          newState.gameStage = 5;
+        } else {
+          newState.gameStage = 4;
         }
-        newState.gameStage++;
+
         return newState;
 
-      case "ADVANCE_ROUND":
-        console.log("-->ADVANCE_ROUND");
+      case "ADVANCE_ROUND":       // Stage 4
         newState.gameStage = 1;
         return newState;
+
+      case "SOMEBODY_LOST":       // Stage 5
+        return INITIAL_STATE;
 
       default:
         throw ("reducer got an unknown action: ", action.type);

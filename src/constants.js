@@ -9,8 +9,8 @@ const ANIM_WARALERT = "animate__pulse";
 const USER_MESSAGES = {
   0: (
     <span>
-      Each player deals off the top of the deck, high card wins and is added to your stack when low.<br />
-      Whoever runs out of cards first loses.<br />
+      Each player deals off the top of the deck, high card wins and is added to your stack.<br />
+      Whoever runs out of cards first loses. Good luck!<br />
       <strong>Click on dealers deck to start the game.</strong>
     </span>
   ),

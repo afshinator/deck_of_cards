@@ -4,7 +4,6 @@ import Player from "./Player";
 
 function GameTable({
   state,
-  dispatch,
   dealerDeckClickHandler,
   userDeckClickHandler,
 }) {

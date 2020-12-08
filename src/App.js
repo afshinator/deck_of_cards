@@ -1,5 +1,4 @@
-
-const { default: GameOfLuck } = require("./components/GameOfLuck");
+import GameOfLuck from './components/GameOfLuck';
 
 function App() {
   return (

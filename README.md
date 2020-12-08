@@ -1,8 +1,10 @@
 # DeckOfCards class, and a simple game in the browser...
 
-The game is simple, and its a game of chance.
+The DeckOfCards class lives in the /src directory; there are also some tests.
 
-A few  shuffled cards are divided between the two players, you and an opponent.  You both reveal the top card of your stack, and high card gets both cards added to their stack.  You win when the other person runs out of cards.
+The game is simple, and its a game of chance, as a React-JS app.
+
+A few shuffled cards are divided between the two players, you and an opponent.  You both reveal the top card of your stack, and high card gets both cards added to their stack.  You win when the other person runs out of cards.
 
 
 

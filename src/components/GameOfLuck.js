@@ -56,7 +56,6 @@ function GameOfLuck() {
         <InformUser>{USER_MESSAGES[state.gameStage]}</InformUser>
         <GameTable
           state={state}
-          dispatch={dispatch}
           dealerDeckClickHandler={dealerDeckClickHandler}
           userDeckClickHandler={userDeckClickHandler}
         />

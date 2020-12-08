@@ -4,9 +4,9 @@
   --white: #f8f4f9;
   --basicPlayingCardSize: 150px;
   --red: #941b0c;
-  --cinnabar: #dc493a;
+  --cinnabar: #fc5130;
   --space: 15px;
-  --cardBackcolor: #40798c;
+  --cardBackcolor:#473335; 
   --playerFromRight: 8%;
 }
 
@@ -28,21 +28,25 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
+  height: 85px;
 }
 header h1 {
   margin: 0 10px;
-  color: var(--red);
+  color: var(--cinnabar);
 }
 header p {
   margin: 0;
   font-size: 60px;
 }
 
+
 footer {
   text-align: center;
   margin-top: 20px;
   font-weight: lighter;
+}
+footer a {
+  color:  var(--cinnabar);
 }
 
 .gameOfLuck {
@@ -55,7 +59,7 @@ footer {
   font-family: sans-serif;
   color: var(--white);
   /* padding-top: var(--space); */
-  height: 45px;
+  height: 50px;
 }
 
 .gameTable {
@@ -124,10 +128,26 @@ footer {
 .redCard { color: var(--red); }
 .blackCard { color: black;}
 
-
-@media (prefers-reduced-motion: no-preference) {
-  .animated {
-    animation: App-logo-spin infinite 20s linear;
+/* be nice to people with vestibular disorders */
+@media (prefers-reduced-motion: reduce) {
+  .animate__animated {
   }
 }
 
+
+
+@media only screen and (max-width: 512px) {
+  header { font-size: 1em; line-height: .8em;}
+  .gameTable section { width: 220px; }
+  
+}
+
+@media only screen and (min-width: 513px) and (max-width: 767px) {
+  header { font-size: 1.5em; line-height: .8em;}
+  .gameTable section { width: 300px; }
+}
+
+@media only screen and (min-width: 768px)  {
+  header { font-size: 2em;}
+  .gameTable section { width: 480px; }
+}

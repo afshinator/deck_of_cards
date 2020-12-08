@@ -6,7 +6,7 @@ A few  shuffled cards are divided between the two players, you and an opponent. 
 
 
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run all the usual CRA scripts, but of special note:
 
@@ -27,6 +27,9 @@ Launches the test runner.  **I've added some tests for DeckOfCards**
 
 * I wanted some high impact animation; I got the most for the buck by using css from anime.css; I didn't install the component, just to keep the project essentialy dependency-free.
 
-* I haven't played with 'classes' in Javascript since before they added that keyword to the language. It was interesting learning about the new syntax and how it works, the iterator, etc... 
+* I haven't played with 'classes' in Javascript since before they added that keyword to the language! It was interesting learning about the new syntax and how it works, the iterator, etc... 
 
-* Even though the game exercises the DeckOfCards, the tests are a better.. test.
+* Even though the game exercises the DeckOfCards, the tests are a better test.
+
+* State management: given the small size of the app, what React provides is plenty. Most of the logic of the app is a custom hook inside src/components/useGameState.js.
+

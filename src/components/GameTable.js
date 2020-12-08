@@ -9,7 +9,7 @@ function GameTable({
   userDeckClickHandler,
 }) {
   return (
-    <div className="gameTable">
+    <div className="gameTable" role="main">
       <GameStats state={state} />
       <Dealer
         gameStage={state.gameStage}

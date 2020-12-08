@@ -9,6 +9,17 @@ import ErrorFallback from "./ErrorFallback";
 
 const CARDS_PER_PLAYER = 4;
 
+function Credits() {
+  return (
+    <footer>
+      by{" "}
+      <a href="https://afshin.me" rel="noreferrer" target="_blank">
+        Afshin Mokhtari
+      </a>
+    </footer>
+  );
+}
+
 function GameOfLuck() {
   const [deck] = useState(() => {
     return new DeckOfCards();
@@ -49,6 +60,7 @@ function GameOfLuck() {
           dealerDeckClickHandler={dealerDeckClickHandler}
           userDeckClickHandler={userDeckClickHandler}
         />
+        <Credits />
       </ErrorBoundary>
     </div>
   );

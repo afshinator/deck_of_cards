@@ -4,7 +4,6 @@ const SUITES = "♠︎ ♥︎ ♣︎ ♦︎".split(" ");
 
 const ANIM_IN_LEFT = "animate__fadeInLeftBig"; // animate.css classes
 const ANIM_TADA = "animate__tada";
-const ANIM_WARALERT = "animate__pulse";
 
 const USER_MESSAGES = {
   0: (

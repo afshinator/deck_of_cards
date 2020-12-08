@@ -1,5 +1,4 @@
 import { useEffect, useReducer } from "react";
-import { DeckOfCards } from "../DeckOfCards";
 import { simpleDeepCopy } from "../utils";
 
 const INITIAL_STATE = {

@@ -1,9 +1,9 @@
-import { DeckOfCards, DeckOfCardsIterator } from './DeckOfCards';
-
+import { DeckOfCards } from './DeckOfCards';
 
 test('Can construct a default DeckOfCards', () => {
   const d = new DeckOfCards();
   expect(d).toBeDefined();
+  expect(d).toBeInstanceOf(DeckOfCards)
 })
 
 test('Can construct a DeckOfCards with 2 jokers', () => {

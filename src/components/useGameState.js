@@ -1,9 +1,8 @@
-
-import { useEffect, useReducer } from 'react';
-import { DeckOfCards } from '../DeckOfCards';
+import { useEffect, useReducer } from "react";
+import { DeckOfCards } from "../DeckOfCards";
+import { simpleDeepCopy } from "../utils";
 
 const INITIAL_STATE = {
-  deck: null, // will hold the DeckOfCards instance
   gameStage: 0, // will help synchronize state with stages in game
   usersUnplayedCards: [],
   usersCardsInPlay: [],
@@ -14,20 +13,19 @@ const INITIAL_STATE = {
   warAlert: false, // true to trigger some visual effects
 };
 
-
 function useGameState(initialState = INITIAL_STATE) {
   const reducer = (state, action) => {
-    const newState = { ...state };
+    const newState = simpleDeepCopy(state);
     let temp = null;
-  
+
     function playTop(who, faceUp = false) {
       const unplayed = newState[`${who}sUnplayedCards`];
       const wins = newState[`${who}sWins`];
       const inPlay = newState[`${who}sCardsInPlay`];
-  
+
       // replenish from wins if unplayed stack is almost empty
-      if (unplayed.length < 2 && wins) {
-        while (wins.length) {
+      if (unplayed.length < 2 && wins.length > 0) {
+        while (wins.length > 0) {
           unplayed.unshift(wins.pop());
         }
       }
@@ -36,25 +34,26 @@ function useGameState(initialState = INITIAL_STATE) {
         console.log("THIS PLAYER LOST: ", who);
         return false;
       } else {
-        inPlay.push(unplayed.pop());
+        const card = unplayed.pop();
+        inPlay.push(card);
         if (faceUp) inPlay[inPlay.length - 1].facing = "up";
         return true;
       }
     }
-  
+
     switch (action.type) {
-      case "INIT_NEW_DECK":
-        newState.deck = new DeckOfCards();
+      case "DEAL_TO_OPPONENT": // Stage 0
+        newState.opponentsUnplayedCards = action.data;
         return newState;
-  
-      case "START_GAME":
-        // Shuffle the deck, deal 26 cards each to players, advance stage
-        newState.deck.shuffle();
-        newState.usersUnplayedCards = newState.deck.dealOffTop(3);
-        newState.opponentsUnplayedCards = newState.deck.dealOffTop(3);
+
+      case "DEAL_TO_USER": // Stage 0
+        newState.usersUnplayedCards = action.data;
+        return newState;
+
+      case "START_GAME": // Stage 0
         newState.gameStage++;
         return newState;
-  
+
       case "PLAY_TOP_CARD":
         if (playTop(action.data, true)) {
           newState.gameStage++;
@@ -62,26 +61,13 @@ function useGameState(initialState = INITIAL_STATE) {
           newState.gameStage = 5;
         }
         return newState;
-  
-      case "WAR_ALERT":
-        newState.warAlert = true;
-        return newState;
-  
-      case "WAR":
-        newState.warAlert = false;
-        temp = true; // use temp var to short circuit other calls if one fails
-        temp = temp && playTop("opponent");
-        temp = temp && playTop("user");
-        temp = temp && playTop("opponent");
-        temp = temp && playTop("user");
-        temp = temp && playTop("opponent");
-        temp = temp && playTop("user");
-        newState.gameStage = temp ? 1 : 5;
-        return newState;
-  
+
       case "ROUND_WIN":
+        console.log("-->ROUND_WIN");
+        // Favors the opponent, but then opponent draws first and can run out first
         temp =
-          action.data === "opponent"
+          newState.usersCardsInPlay[0].rank <
+          newState.opponentsCardsInPlay[0].rank
             ? newState.opponentsWins
             : newState.usersWins;
         while (newState.usersCardsInPlay.length) {
@@ -92,25 +78,19 @@ function useGameState(initialState = INITIAL_STATE) {
         }
         newState.gameStage++;
         return newState;
-  
+
       case "ADVANCE_ROUND":
+        console.log("-->ADVANCE_ROUND");
         newState.gameStage = 1;
         return newState;
-  
+
       default:
         throw ("reducer got an unknown action: ", action.type);
     }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const {
-    gameStage,
-    usersCardsInPlay,
-    opponentsCardsInPlay,
-  } = state;
-  
-  useEffect(() => {
-    dispatch({ type: "INIT_NEW_DECK" });
-  }, []);
+
+  const { gameStage } = state;
 
   useEffect(() => {
     if (gameStage === 1) {
@@ -119,15 +99,8 @@ function useGameState(initialState = INITIAL_STATE) {
       }, 1000);
     }
     if (gameStage === 3) {
-      const userRank = usersCardsInPlay[0].rank;
-      const opponentRank = opponentsCardsInPlay[0].rank;
-
       setTimeout(() => {
-        if (userRank < opponentRank) {
-          dispatch({ type: "ROUND_WIN", data: "opponent" });
-        } else if (userRank > opponentRank) {
-          dispatch({ type: "ROUND_WIN", data: "user" });
-        }
+        dispatch({ type: "ROUND_WIN" });
       }, 1500);
     }
     if (gameStage === 4) {
@@ -137,14 +110,13 @@ function useGameState(initialState = INITIAL_STATE) {
     }
     if (gameStage === 5) {
       // somebody is out of cards!
-      console.log("stage 5: somebody is out of cards");
       setTimeout(() => {
         dispatch({ type: "SOMEBODY_LOST" });
       }, 3000);
     }
   }, [gameStage]);
 
-  return [state, dispatch]
+  return [state, dispatch];
 }
 
-export default useGameState
+export default useGameState;

@@ -2,18 +2,12 @@ import GameStats from "./GameStats";
 import Dealer from "./Dealer";
 import Player from "./Player";
 
-function GameTable({ state, dispatch }) {
-  const dealerDeckClickHandler = function () {
-    if (state.gameStage === 0) {
-      dispatch({ type: "START_GAME" });
-    }
-  };
-  const userDeckClickHandler = function () {
-    if (state.gameStage === 2) {
-      dispatch({ type: "PLAY_TOP_CARD", data: "user" });
-    }
-  };
-
+function GameTable({
+  state,
+  dispatch,
+  dealerDeckClickHandler,
+  userDeckClickHandler,
+}) {
   return (
     <div className="gameTable">
       <GameStats state={state} />

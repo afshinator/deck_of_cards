@@ -39,7 +39,7 @@ function GameStats({state}) {
         {usersWins.length}
       </p>
       <div className="statsMiddle">
-        {gameStage === 2 ? <h3>➾Click on your card ☞</h3> : null}
+        {gameStage === 2 ? <h3>➾ Your turn </h3> : null}
         {gameStage === 4 ? <h3>✩ {lastWin} Won that round ✩</h3> : null}
         {gameStage === 5 
         ? 

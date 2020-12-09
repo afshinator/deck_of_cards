@@ -27,7 +27,7 @@ function Player(props) {
       ? usersCardsInPlay[0].rank > opponentsCardsInPlay[0].rank
       : usersCardsInPlay[0].rank < opponentsCardsInPlay[0].rank);
 
-  const slideInOnce = roundsInPlay < 0 ? ANIM_IN_LEFT : "";
+  const slideInOnce = roundsInPlay < 1 ? ANIM_IN_LEFT : "";
 
   return (
     <section className={`${who}`}>

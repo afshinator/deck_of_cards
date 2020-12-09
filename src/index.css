@@ -68,10 +68,11 @@ footer a {
   max-width: 1024px;
   height: 550px;
   margin-top: 15px;
-  border: 2px solid var(--cinnabar);
+  /* border: 2px solid var(--cinnabar); */
   border-radius: 3px;
   user-select: none;
   background-color: var(--appBkgd);
+  box-shadow: 0 0 0 3px var(--cinnabar), 0 10px 20px -5px var(--cinnabar);
 }
 .gameTable section {
   position: absolute;

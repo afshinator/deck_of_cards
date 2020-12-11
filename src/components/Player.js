@@ -1,12 +1,25 @@
 import FaceDownStack from "./FaceDownStack";
 import VisiblePlayingCard from "./VisiblePlayingCard";
 import { ANIM_IN_LEFT, ANIM_TADA } from "../constants";
+import { useContext } from 'react';
+import { GameContext } from "./GameOfLuck";
+
+
 
 function CardPlaceHolder() {
   return <div className="placeHolder"></div>;
 }
 
-function Player(props) {
+function Player({who, clickHandler}) {
+  const state = useContext(GameContext)
+  return (
+    <section className={`${who}`}>
+
+    </section>
+  )
+}
+
+function Playerx(props) {
   const { who, state, clickHandler } = props;
   const {
     gameStage,

@@ -5,42 +5,53 @@ import FaceDownStack from "./FaceDownStack";
 import { ANIM_IN_LEFT } from "../constants";
 import { useContext } from "react";
 import { GameContext } from "./GameOfLuck";
-import { useMachine } from '@xstate/react';
-import { createMachine, assign } from "xstate";
 
-export const luckGameMachine = createMachine(
-  {
-    initial: "idle",
-    context: {
-      usersDraw: null,
-      oppDraw: null,
-
-    },
-    states: {
-      idle: {
-        on: {
-          READY_TO_START: {
-            target: "opponentDraws",
-            // actions: [''],
-          },
-        },
-      },
-      opponentDraws: {
-        entry: ['oppDraw'],
-        on: { USER_DRAWS: "roundComplete" },
-      },
-      roundComplete: {},
-      gameEnd: {},
-    },
+const luckCardGameMachine = Machine({
+  id: 'luckGame',
+  initial: 'start',
+  context: {
+    usersPlay: null,
+    oppsPlay: null,
+    usersCards: [],
+    oppsCards: []
   },
-  {
-    actions: {
-      oppDraw: (context, event) => {
-console.log('::::::::::::oppDraw action executed')
-      },
+  states: {
+    start: {
+      entry: ['instantiate'],
+      on: {
+        INIT: 'shuffle'
+      }
+    },
+    shuffle: {
+      entry: ['shuffle'],
+      on: {
+        START: 'play_game'
+      }
+    },
+    play_game: {
+      type: 'final'
+    },
+    failure: {
+      on: {
+        RETRY: {
+          target: 'loading',
+          actions: assign({
+            retries: (context, event) => context.retries + 1
+          })
+        }
+      }
     }
   }
-);
+},{
+  actions: {
+    instantiate: (context, event) => {
+      // deck = new DeckOfCards();
+    },
+    shuffle: (context, event) => {
+      // deck = shuffle();
+    }      
+  }
+});
 
 function GameTable({ gameState, children, ...rest }) {
   const [tableState, send] = useMachine(luckGameMachine);

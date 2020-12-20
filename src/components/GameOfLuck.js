@@ -6,9 +6,47 @@ import ErrorFallback from "./ErrorFallback";
 import { useLuckGameState } from "./useLuckGameState";
 import { createContext } from "react";
 
+import { useMachine } from '@xstate/react';
+import { createMachine, assign } from "xstate";
+
 const INITIAL_STATE = {
   gameStage: "PRE_INIT",
+  usersUnplayedCards: [],
+  opponentsUnplayedCards: [],
 };
+
+export const luckGameMachine = createMachine(
+  {
+    initial: "idle",
+    context: {
+      usersDraw: null,
+      oppDraw: null,
+    },
+    states: {
+      idle: {
+        on: {
+          READY_TO_START: {
+            target: "opponentDraws",
+            // actions: [''],
+          },
+        },
+      },
+      opponentDraws: {
+        entry: ['oppDraw'],
+        on: { USER_DRAWS: "roundComplete" },
+      },
+      roundComplete: {},
+      gameEnd: {},
+    },
+  },
+  {
+    actions: {
+      oppDraw: (context, event) => {
+console.log('::::::::::::oppDraw action executed')
+      },
+    }
+  }
+);
 
 function Credits() {
   return (

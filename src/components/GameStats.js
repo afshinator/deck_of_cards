@@ -1,6 +1,7 @@
+import * as React from "react";
 import { useState } from "react";
 
-function GameStats({ state }) {
+function GameStats({ state, children }) {
   const {
     gameStage,
     usersCardsInPlay,
@@ -26,28 +27,64 @@ function GameStats({ state }) {
     else if (winCheckOpp && lastWin === "") setLastWin("Opponent");
   }
 
-  if (gameStage === 5) {
-    winCheckOpp = usersUnplayedCards.length < 1;
-    winCheckUser = opponentsUnplayedCards.length < 1;
-  }
+  const kids = React.Children.map(children, (child) =>
+    React.cloneElement(child, { state, lastWin })
+  );
+
   return (
     <div className="gameStats">
       <p>
         ➾ YOUR stack:<strong>{usersUnplayedCards.length}</strong>
       </p>
-      <div className="statsMiddle">
-        {gameStage === 2 ? <h3>➾ Your turn </h3> : null}
-        {gameStage === 4 && lastWin!=="" ? <h3>✩ {lastWin} won that round ✩</h3> : null}
-        {gameStage === 4 && lastWin ==="" ? <h3>✩ Same card! Random winner! ✩</h3> : null}
-        {gameStage === 5 ? (
-          <h3>✩✩ {winCheckOpp ? "Opponent won game!" : "User won game!"} ✩✩</h3>
-        ) : null}
-      </div>
+      <div className="statsMiddle">{kids}</div>
       <p>
         ➾ OPPONENTS stack:<strong>{opponentsUnplayedCards.length}</strong>
       </p>
     </div>
   );
 }
+
+
+/* All those conditionals in the render method got refactored out and 
+    put in these nicely named compound components... 
+  */
+
+GameStats.UsersTurnMessage = function ({ state, children }) {
+  if (state.gameStage !== 2) return null;
+  return children;
+};
+
+// No children for this one
+GameStats.ShowWhoWon = function ({ state, lastWin }) {
+  if (state.gameStage !== 4) return null;
+  if (lastWin !== "") {
+    return <h3>✩ {lastWin} won that round ✩</h3>;
+  }
+  return null;
+};
+
+GameStats.TieGameMessage = function ({ state, lastWin, children }) {
+  if (state.gameStage !== 4) return null;
+  if (lastWin === "") {
+    return children;
+  }
+  return null;
+};
+
+GameStats.UserWonMessage = function ({ state, children }) {
+  if (state.gameStage !== 5) return null;
+  if (state.opponentsUnplayedCards.length < 1) {
+    return children;
+  }
+  return null;
+};
+
+GameStats.OpponentWonMessage = function ({ state, children }) {
+  if (state.gameStage !== 5) return null;
+  if (state.usersUnplayedCards.length < 1) {
+    return children;
+  }
+  return null;
+};
 
 export default GameStats;

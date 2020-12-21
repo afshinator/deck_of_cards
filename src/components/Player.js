@@ -1,3 +1,4 @@
+import * as React from "react";
 import FaceDownStack from "./FaceDownStack";
 import VisiblePlayingCard from "./VisiblePlayingCard";
 import { ANIM_IN_LEFT, ANIM_TADA } from "../constants";
@@ -7,54 +8,70 @@ function CardPlaceHolder() {
 }
 
 function Player(props) {
-  const { who, state, clickHandler } = props;
-  const {
-    gameStage,
-    roundsInPlay,
-    usersUnplayedCards,
-    usersCardsInPlay,
-    opponentsUnplayedCards,
-    opponentsCardsInPlay,
-  } = state;
+  const { who } = props;
 
-  const isUser = who === "user"; // else is "opponent"
-  const cardsInPlay = isUser ? usersCardsInPlay : opponentsCardsInPlay;
-  const unplayedCards = isUser ? usersUnplayedCards : opponentsUnplayedCards;
+  // Give all the top level children the props 
+  const kids = React.Children.map(props.children, (child) =>
+    React.cloneElement(child, { props })
+  );
 
-  const winCheck =
-    gameStage === 3 &&
-    (isUser
-      ? usersCardsInPlay[0].rank > opponentsCardsInPlay[0].rank
-      : usersCardsInPlay[0].rank < opponentsCardsInPlay[0].rank);
-
-  const slideInOnce = roundsInPlay < 1 ? ANIM_IN_LEFT : "";
-
+  // Render all the children who now have all Player's props
   return (
     <section className={`${who}`}>
-      {cardsInPlay.length ? (
-        winCheck ? (
-          <VisiblePlayingCard
-            suite={cardsInPlay[0].suite}
-            rank={cardsInPlay[0].rank}
-            facing={cardsInPlay[0].facing}
-            classes={ANIM_TADA}
-          />
-        ) : (
-          <VisiblePlayingCard
-            suite={cardsInPlay[0].suite}
-            rank={cardsInPlay[0].rank}
-            facing={cardsInPlay[0].facing}
-          />
-        )
-      ) : (
-        <CardPlaceHolder />
-      )}
-      {unplayedCards.length ? (
-        <FaceDownStack animClass={slideInOnce} clickHandler={clickHandler} />
-      ) : (
-        <CardPlaceHolder />
-      )}
+      {kids}
     </section>
   );
 }
+
+Player.CardsInPlay = function ({ props }) {
+  const isUser = props.who === "user";
+  const cardsInPlay = isUser
+    ? props.state.usersCardsInPlay
+    : props.state.opponentsCardsInPlay;
+  const winCheck =
+    props.state.gameStage === 3 &&
+    (isUser
+      ? props.state.usersCardsInPlay[0].rank >
+        props.state.opponentsCardsInPlay[0].rank
+      : props.state.usersCardsInPlay[0].rank <
+        props.state.opponentsCardsInPlay[0].rank);
+  
+  if ( cardsInPlay.length ) {
+    return  winCheck ? (
+      <VisiblePlayingCard
+        suite={cardsInPlay[0].suite}
+        rank={cardsInPlay[0].rank}
+        facing={cardsInPlay[0].facing}
+        classes={ANIM_TADA}
+      />
+    ) : (
+      <VisiblePlayingCard
+        suite={cardsInPlay[0].suite}
+        rank={cardsInPlay[0].rank}
+        facing={cardsInPlay[0].facing}
+      />
+    )
+  } else {
+    return <CardPlaceHolder />;
+  }
+};
+
+Player.UnplayedCards = function ({ props, children }) {
+  const isUser = props.who === "user";
+  const unplayedCards = isUser
+    ? props.state.usersUnplayedCards
+    : props.state.opponentsUnplayedCards;
+  const slideInOnce = props.state.roundsInPlay < 1 ? ANIM_IN_LEFT : "";
+  if (unplayedCards.length) {
+    return (
+      <FaceDownStack
+        animClass={slideInOnce}
+        clickHandler={props.clickHandler}
+      />
+    );
+  } else {
+    return <CardPlaceHolder />;
+  }
+};
+
 export default Player;

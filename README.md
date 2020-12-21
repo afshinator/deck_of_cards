@@ -39,3 +39,4 @@ Launches the test runner.  **I've added some tests for DeckOfCards**
 
 * State management: given the small size of the app, what React provides is plenty. Most of the logic of the app is a custom hook inside src/components/useGameState.js.
 
+* I went back (12/20) to see if I can refactor some of my code to use specifically the Compound Component design pattern.  Happy to say it worked out well, imo.  Its on its own branch.
